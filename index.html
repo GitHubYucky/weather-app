@@ -4,109 +4,14 @@
     <meta charset="UTF-8" />
     <title>天気予報アプリ</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style>
-      body {
-        font-family: sans-serif;
-        text-align: center;
-        padding: 20px;
-        background: linear-gradient(to top, #e0f7fa, #ffffff);
-      }
-      h1 {
-        margin-bottom: 20px;
-      }
-      input,
-      button {
-        padding: 10px;
-        font-size: 1em;
-        margin: 10px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-      }
-      button {
-        cursor: pointer;
-        background-color: #0288d1;
-        color: white;
-      }
-      #weatherResult {
-        margin-top: 20px;
-        font-size: 1.2em;
-        background-color: #ffffffcc;
-        border-radius: 8px;
-        padding: 15px;
-        display: inline-block;
-      }
-      @media (max-width: 600px) {
-        input,
-        button {
-          width: 90%;
-          font-size: 1.2em;
-        }
-        #weatherResult {
-          width: 90%;
-          font-size: 1em;
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <h1>天気予報アプリ</h1>
     <input type="text" id="cityInput" placeholder="都市名を入力 (例: Tokyo)" />
-    <button onclick="getWeather()">天気を調べる</button>
-
+    <button id="searchButton">天気を調べる</button>
     <div id="weatherResult"></div>
 
-    <script>
-      function getWeatherDescription(code) {
-        if (code === 0) return "晴れ ☀️";
-        if (code >= 1 && code <= 3) return "曇り 🌥️";
-        if (code === 45 || code === 48) return "霧 🌫️";
-        if (code >= 51 && code <= 67) return "小雨 🌦️";
-        if (code >= 71 && code <= 77) return "雪 ❄️";
-        if (code >= 80 && code <= 82) return "にわか雨 🌧️";
-        if (code >= 95) return "雷雨 ⛈️";
-        return "不明";
-      }
-
-      async function getWeather() {
-        const city = document.getElementById("cityInput").value.trim();
-        const result = document.getElementById("weatherResult");
-        if (!city) return alert("都市名を入力してください");
-
-        result.innerHTML = "天気を取得中...";
-
-        try {
-          // 地名 → 緯度経度
-          const geoRes = await fetch(
-            `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
-              city
-            )}`
-          );
-          const geoData = await geoRes.json();
-          if (!geoData.results || geoData.results.length === 0) {
-            result.innerHTML = "都市が見つかりませんでした。";
-            return;
-          }
-          const { latitude, longitude, name } = geoData.results[0];
-
-          // 天気取得
-          const weatherRes = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`
-          );
-          const weatherData = await weatherRes.json();
-          const weather = weatherData.current_weather;
-          const description = getWeatherDescription(weather.weathercode);
-
-          // 結果表示
-          result.innerHTML = `
-          <p><strong>${name}</strong> の現在の天気</p>
-          <p>気温：${weather.temperature}℃</p>
-          <p>天気：${description}</p>
-        `;
-        } catch (error) {
-          result.innerHTML = "天気情報の取得に失敗しました。";
-          console.error(error);
-        }
-      }
-    </script>
+    <script src="main.js" defer></script>
   </body>
 </html>
