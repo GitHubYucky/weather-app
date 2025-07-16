@@ -18,8 +18,8 @@ export function getGeoInfo(city) {
 }
 export function getWeatherInfo(lat, lon) {
     return __awaiter(this, void 0, void 0, function* () {
-        const res = yield fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+        const res = yield fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto`);
         const data = yield res.json();
-        return data.current_weather;
+        return data;
     });
 }

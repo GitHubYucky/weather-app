@@ -1,4 +1,6 @@
-export function renderWeatherResult(container, weather) {
+import { ProcessedWeather } from "./weatherService.js";
+
+export function renderWeatherResult(container: HTMLElement, weather: ProcessedWeather) {
     container.innerHTML = `
       <h2>${weather.cityName}の天気</h2>
       <p>気温: ${weather.current.temperature}°C</p>
@@ -15,11 +17,13 @@ export function renderWeatherResult(container, weather) {
         `).join('')}
       </div>
     `;
-}
-export function renderLoading(container) {
+  }
+
+  export function renderLoading(container: HTMLElement) {
     container.innerHTML = "<p>読み込み中...</p>";
-}
-export function renderError(container, message = "エラーが発生しました。") {
+  }
+
+  export function renderError(container: HTMLElement, message: string = "エラーが発生しました。") {
     container.innerHTML = `<p>${message}</p>
 `;
-}
+  }

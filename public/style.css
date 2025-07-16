@@ -34,6 +34,16 @@ button {
   display: inline-block;
 }
 
+.weekly-forecast {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.day-forecast {
+  text-align: center;
+}
+
 @media (max-width: 600px) {
   input,
   button {
@@ -43,5 +53,8 @@ button {
   #weatherResult {
     width: 90%;
     font-size: 1em;
+  }
+  .weekly-forecast {
+    flex-direction: column;
   }
 }

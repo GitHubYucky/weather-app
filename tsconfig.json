@@ -6,8 +6,9 @@
       "strict": true,
       "esModuleInterop": true,
       "outDir": "./dist",
+      "rootDir": "./src",
       "forceConsistentCasingInFileNames": true
     },
-    "include": ["**/*.ts"],
+    "include": ["src/**/*.ts"],
     "exclude": ["node_modules"]
   }

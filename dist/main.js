@@ -8,9 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 var _a;
-import { getGeoInfo, getWeatherInfo } from "./api.js";
 import { renderWeatherResult, renderError, renderLoading } from "./dom.js";
-import { getWeatherDescription } from "./utils.js";
+import { fetchAndProcessWeather } from "./weatherService.js";
 (_a = document.getElementById("searchButton")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => __awaiter(void 0, void 0, void 0, function* () {
     const input = document.getElementById("cityInput");
     const result = document.getElementById("weatherResult");
@@ -19,13 +18,12 @@ import { getWeatherDescription } from "./utils.js";
         return alert("都市名を入力してください");
     renderLoading(result);
     try {
-        const geo = yield getGeoInfo(city);
-        const weather = yield getWeatherInfo(geo.latitude, geo.longitude);
-        const description = getWeatherDescription(weather.weathercode);
-        renderWeatherResult(result, geo.name, weather.temperature, description);
+        const weather = yield fetchAndProcessWeather(city);
+        renderWeatherResult(result, weather);
     }
     catch (err) {
-        renderError(result);
+        const message = err instanceof Error ? err.message : "不明なエラーです";
+        renderError(result, message);
         console.error(err);
     }
 }));
