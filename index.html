@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>天気予報アプリ</title>
+  </head>
+  <body>
+    <h1>天気予報アプリ</h1>
+    <input type="text" id="cityInput" placeholder="都市名を入力 (例: Tokyo)" />
+    <button onclick="getWeather()">天気を調べる</button>
+
+    <div id="weatherResult"></div>
+
+    <script>
+      async function getWeather() {
+        const city = document.getElementById("cityInput").value;
+        if (!city) return alert("都市名を入力してください");
+
+        // ① 地名 → 緯度・経度を取得
+        const geoRes = await fetch(
+          `https://geocoding-api.open-meteo.com/v1/search?name=${city}`
+        );
+        const geoData = await geoRes.json();
+        if (!geoData.results || geoData.results.length === 0) {
+          return alert("都市が見つかりませんでした");
+        }
+        const { latitude, longitude, name } = geoData.results[0];
+
+        // ② 緯度・経度 → 天気データ取得
+        const weatherRes = await fetch(
+          `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`
+        );
+        const weatherData = await weatherRes.json();
+        const weather = weatherData.current_weather;
+
+        // ③ 結果を表示
+        document.getElementById("weatherResult").innerHTML = `
+        <p><strong>${name}</strong> の現在の天気</p>
+        <p>気温：${weather.temperature}℃</p>
+        <p>天気コード：${weather.weathercode}</p>
+      `;
+      }
+    </script>
+  </body>
+</html>
